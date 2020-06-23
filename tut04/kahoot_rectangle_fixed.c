@@ -1,3 +1,7 @@
+// Author: Finbar Berkon
+// Date: June 2020
+// A program to print out a rectangle of hashes
+
 #include <stdio.h>
 
 #define MAX_ROW 5
@@ -12,5 +16,6 @@ int main(void) {
             j = j + 1;
         }
         printf("\n");
+        i = i + 1;
     }
 }

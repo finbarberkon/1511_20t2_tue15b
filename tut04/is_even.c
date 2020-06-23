@@ -4,8 +4,29 @@
 
 #include <stdio.h>
 
+#define TRUE 1
+#define FALSE 0
+
+// Three things to do to use a function we define ourselves:
+// 1) provide a function prototype
+// 2) actually implement our function
+// 3) call our function
+
+int is_even(int num);
+
 int main(void) {
-  /* 1) create a function called is_even which takes an integer
-   *    and returns whether it is even or odd */
-  return 0;
+    if (is_even(2)) {
+        printf("%d is even\n", 2);
+    } else {
+        printf("%d is not even\n", 2);
+    }
+    return 0;
+}
+
+int is_even(int num) {
+    if (num % 2 == 0) {
+        return TRUE;
+    } else {
+        return FALSE;
+    }
 }
