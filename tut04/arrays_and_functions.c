@@ -25,9 +25,9 @@ int main(void) {
         printf("You entered %d\n", input[i]);
         i++;
     }
-    
+
     print_array(input, i);
-    
+
     return 0;
 }
 
