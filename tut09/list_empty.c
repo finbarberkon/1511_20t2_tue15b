@@ -5,16 +5,64 @@
 #include "list.h"
 
 // ======= W10 Tut Problems ========
+
+struct node *list_append(struct node *list1, struct node *list2) {
+    struct node *curr = list1;
+    
+    // Check if the first list is empty, in which case we can just return the
+    // second list
+    if (curr == NULL) {
+        return list2;
+    }
+    
+    // Get current to the right place
+    while (curr->next != NULL) {
+        curr = curr->next;
+    }
+    
+    // What do we do now that current points to the last node in list 1
+    curr->next = list2;
+    
+    // how do we give back the pointer ot the whole list?
+    return list1;
+}
+
 // returns a copy of the linked list
 struct node *copy(struct node *head) {
-    // replace this!
-    return head;
+    if (head == NULL) {
+        return NULL;
+    }
+    
+    struct node *new_head = create_node(head->data);
+    struct node *old_curr = head->next;
+    struct node *new_curr = new_head;
+    
+    while (old_curr != NULL) {
+        new_curr->next = create_node(old_curr->data);
+        new_curr = new_curr->next;
+        old_curr = old_curr->next;
+    }
+    
+    return new_head;
 }
 
 // returns 1 if the two lists are identical, otherwise returns 0
 int identical(struct node *head1, struct node *head2) {
-    // replace this!
-    return 0;
+    if (head1 == NULL && head2 == NULL) return 1;
+    if (head1 == NULL /* and head2 != NULL*/) return 0;
+    if (head2 == NULL /* and head1 != NULL*/) return 0;
+    
+    while (head1 != NULL && head2 != NULL) {
+        if (head1->data != head2->data) return 0;
+        head1 = head1->next;
+        head2 = head2->next;
+    }
+    
+    if (head1 == NULL && head2 == NULL) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 // returns 1 if list is in strictly increasing order, otherwise returns 0
