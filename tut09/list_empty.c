@@ -8,21 +8,21 @@
 
 struct node *list_append(struct node *list1, struct node *list2) {
     struct node *curr = list1;
-    
+
     // Check if the first list is empty, in which case we can just return the
     // second list
     if (curr == NULL) {
         return list2;
     }
-    
+
     // Get current to the right place
     while (curr->next != NULL) {
         curr = curr->next;
     }
-    
+
     // What do we do now that current points to the last node in list 1
     curr->next = list2;
-    
+
     // how do we give back the pointer ot the whole list?
     return list1;
 }
@@ -32,17 +32,17 @@ struct node *copy(struct node *head) {
     if (head == NULL) {
         return NULL;
     }
-    
+
     struct node *new_head = create_node(head->data);
     struct node *old_curr = head->next;
     struct node *new_curr = new_head;
-    
+
     while (old_curr != NULL) {
         new_curr->next = create_node(old_curr->data);
         new_curr = new_curr->next;
         old_curr = old_curr->next;
     }
-    
+
     return new_head;
 }
 
@@ -51,13 +51,13 @@ int identical(struct node *head1, struct node *head2) {
     if (head1 == NULL && head2 == NULL) return 1;
     if (head1 == NULL /* and head2 != NULL*/) return 0;
     if (head2 == NULL /* and head1 != NULL*/) return 0;
-    
+
     while (head1 != NULL && head2 != NULL) {
         if (head1->data != head2->data) return 0;
         head1 = head1->next;
         head2 = head2->next;
     }
-    
+
     if (head1 == NULL && head2 == NULL) {
         return 1;
     } else {
@@ -73,8 +73,97 @@ int ordered(struct node *head) {
 // given two lists in strictly increasing order,
 // return a new linked list (in strictly increasing order) of the elements in both set1 and set2
 struct node *set_intersection(struct node *set1, struct node *set2) {
-    return NULL;    // replace this
+    // Create two pointers to point to our new list which will represent
+    // the intersection of set1 and set2. This list is empty until we
+    // actually find an intersecting node, so both start at NULL
+    struct node *head = NULL;
+    struct node *tail = NULL;
+
+    // Loop through both lists at the same time.
+    // We're not going to be at exactly the same place
+    // in both lists, we might move asymetrically
+    // based on which numbers are higher in which list.
+    // (See the comment below the function to visualise
+    //  what we're doing)
+    struct node *curr1 = set1;
+    struct node *curr2 = set2;
+    while (curr1 != NULL && curr2 != NULL) {
+        if (curr1->data < curr2->data) {
+            // set1 is lower, so needs to catch up
+            curr1 = curr1->next;
+        } else if (curr1->data > curr2-> data) {
+            // set2 is lower, so needs to catch up
+            curr2 = curr2->next;
+        } else { // curr1->data == curr2->data
+            // numbers are the same, so we add a node to the new list
+            if (head == NULL) {
+                // insert at the start of the new list
+                head = create_node(curr1->data);
+                tail = head;
+            } else {
+                // insert at the end of the new list
+                tail->next = create_node(curr1->data);
+                tail = tail->next;
+            }
+            curr1 = curr1->next;
+            curr2 = curr2->next;
+        }
+    }
+    return head;
 }
+//##########################################################
+// To visualise the code above, lets think about the lists:
+// |1|-->|4|-->|5|-->|7|-->X
+// |1|-->|2|-->|4|-->|7|-->X
+//
+// At the beginning we have this which is an intersection
+// curr1
+//   V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//   ^
+// curr2
+//
+// Then we have (no intersection)
+//       curr1
+//         V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//         ^
+//       curr2
+//
+// Then we have (intersection)
+//       curr1
+//         V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//               ^
+//             curr2
+//
+// Then we have (no intersection)
+//             curr1
+//               V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//                     ^
+//                   curr2
+//
+// Then we have (intersection)
+//                   curr1
+//                     V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//                     ^
+//                   curr2
+//
+// Then we have (no intersection and end of the list)
+//                        curr1
+//                          V
+//  |1|-->|4|-->|5|-->|7|-->X
+//  |1|-->|2|-->|4|-->|7|-->X
+//                          ^
+//                        curr2
+//##########################################################
 
 // given two linked lists in strictly increasing order,
 // return a new linked list (in strictly increasing order) of the elements in either set1 or set2
